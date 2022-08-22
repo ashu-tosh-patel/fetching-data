@@ -1,21 +1,23 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 
-export const useFetch = (url) => {
+export const useFetch = (url, _options) => {
     const [data, setData] = useState(null)
     const [isPending, setIsPending] = useState(false)
     const [error, setError] = useState(null)
 
-    useEffect(() => {
-        const fetchData = async () => {
+    const options = useRef(_options).current
 
+    useEffect(() => {
+        console.log(options)
+        const fetchData = async () => {
 
             setIsPending(true)
 
             try {
 
                 const res = await fetch(url)
-                if(!res.ok){
+                if (!res.ok) {
                     throw new Error(res.statusText)
                 }
                 const json = await res.json()
@@ -30,7 +32,7 @@ export const useFetch = (url) => {
             }
         }
         fetchData()
-    }, [url])
+    }, [url, options])
 
     return { data, isPending, error }
 
